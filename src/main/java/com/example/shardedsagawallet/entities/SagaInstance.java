@@ -1,5 +1,6 @@
 package com.example.shardedsagawallet.entities;
 
+import lombok.*;
 import org.apache.calcite.model.JsonType;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -12,14 +13,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "saga_instance")
 public class SagaInstance {
     @Id
