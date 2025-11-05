@@ -153,10 +153,7 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
         }
     }
 
-
-
     @Override
-    @Transactional
     public SagaInstance getSagaInstance(Long sagaInstanceId) {
         return sagaInstanceRepository.findById(sagaInstanceId).orElseThrow(() -> new RuntimeException("Saga instance not found"));
     }
@@ -180,6 +177,7 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
                 allCompensated = false;
             }
         }
+        // Todo: make the compensations go in parallel
 
         if(allCompensated) {
             sagaInstance.markAsCompensated();
@@ -189,6 +187,7 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
             log.error("Saga {} compensation failed", sagaInstanceId);
         }
 
+
     }
 
     @Override
@@ -197,6 +196,7 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
         SagaInstance sagaInstance = sagaInstanceRepository.findById(sagaInstanceId).orElseThrow(() -> new RuntimeException("Saga instance not found"));
         sagaInstance.markAsFailed();
         sagaInstanceRepository.save(sagaInstance);
+
         compensateSaga(sagaInstanceId);
 
         log.info("Saga {} failed", sagaInstanceId);

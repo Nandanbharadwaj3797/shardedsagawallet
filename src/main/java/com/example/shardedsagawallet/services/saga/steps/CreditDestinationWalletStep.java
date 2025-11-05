@@ -36,12 +36,14 @@ public class CreditDestinationWalletStep implements SagaStepInterface {
 
         log.info("Wallet fetched with balance {}", wallet.getBalance());
         context.put("originalToWalletBalance", wallet.getBalance());
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
         // Step 3: Credit the destination wallet
-        wallet.credit(amount);
-        walletRepository.save(wallet);
+        walletRepository.updateBalanceByUserId(toWalletId, wallet.getBalance().add(amount));
+
         log.info("Wallet saved with balance {}", wallet.getBalance());
         context.put("toWalletBalanceAfterCredit", wallet.getBalance());
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
         log.info("Credit destination wallet step executed successfully");
         return true;
@@ -61,12 +63,12 @@ public class CreditDestinationWalletStep implements SagaStepInterface {
                 .orElseThrow(() -> new RuntimeException("Wallet not found"));
 
         log.info("Wallet fetched with balance {}", wallet.getBalance());
+// Step 3: Credit the destination wallet
 
-        // Step 3: Credit the destination wallet
-        wallet.debit(amount);
-        walletRepository.save(wallet);
+        walletRepository.updateBalanceByUserId(toWalletId, wallet.getBalance().subtract(amount));
         log.info("Wallet saved with balance {}", wallet.getBalance());
         context.put("toWalletBalanceAfterCreditCompensation", wallet.getBalance());
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
         log.info("Credit compensation of destination wallet step executed successfully");
         return true;

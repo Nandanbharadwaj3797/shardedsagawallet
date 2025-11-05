@@ -1,6 +1,5 @@
 package com.example.shardedsagawallet.entities;
 
-import lombok.*;
 import org.apache.calcite.model.JsonType;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -13,6 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -33,7 +38,7 @@ public class SagaInstance {
     @Column(name = "context", columnDefinition = "json")
     private String context;
 
-    @Column(name = "current_step", nullable = false)
+    @Column(name = "current_step")
     private String currentStep;
 
     public void markAsStarted() {
@@ -59,5 +64,4 @@ public class SagaInstance {
     public void markAsCompensated() {
         this.status = SagaStatus.COMPENSATED;
     }
-
 }

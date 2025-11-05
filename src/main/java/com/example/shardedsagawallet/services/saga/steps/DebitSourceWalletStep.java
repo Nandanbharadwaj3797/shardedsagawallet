@@ -34,11 +34,13 @@ public class DebitSourceWalletStep implements SagaStepInterface {
         log.info("Wallet fetched with balance {}", wallet.getBalance());
         context.put("originalSourceWalletBalance", wallet.getBalance());
 
-        wallet.debit(amount);
-        walletRepository.save(wallet);
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
+        walletRepository.updateBalanceByUserId(fromWalletId, wallet.getBalance().subtract(amount));
         log.info("Wallet saved with balance {}", wallet.getBalance());
         context.put("sourceWalletBalanceAfterDebit", wallet.getBalance());
+
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
         log.info("Debit source wallet step executed successfully");
 
@@ -60,12 +62,14 @@ public class DebitSourceWalletStep implements SagaStepInterface {
         log.info("Wallet fetched with balance {}", wallet.getBalance());
         context.put("sourceWalletBalanceBeforeCreditCompensation", wallet.getBalance());
 
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
-        wallet.credit(amount);
-        walletRepository.save(wallet);
+        walletRepository.updateBalanceByUserId(fromWalletId, wallet.getBalance().add(amount));
 
         log.info("Wallet saved with balance {}", wallet.getBalance());
         context.put("sourceWalletBalanceAfterCreditCompensation", wallet.getBalance());
+
+        // TODO: Once the context is updated in memory, we need to update the context in the database
 
         log.info("Compensating source wallet step executed successfully");
 
